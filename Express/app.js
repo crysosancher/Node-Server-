@@ -1,18 +1,20 @@
 const express=require('express')
+const bodyparser=require('body-parser')
 
 const app=express();
-app.use('/',(req,res,next)=>{
-	console.log("I must run everytime")
-	next();//easily going to any next condition. Note->req moves from top to bottom
+
+app.use(bodyparser.urlencoded({extended: false}));
+
+app.use('/add-product',(req,res,next)=>{
+	res.send('<form action="/product" method="POST"><input type="text"name="title"><button type="submit">click on me</button></form>')
+})
+app.use('/product',(req,res,next)=>{
+	console.log(req.body)
+	res.redirect('/')
 
 })
 
-app.use('/message',(req,res,next)=>{
-	res.send('<h1>This what she said what Vibhu is everywhere</h1>')
-})
-
 app.use('/',(req,res,next)=>{
-	console.log("in the another middleware")
 	res.send('<h1>Vibhu is everywhere</h1>')
 })
 
