@@ -1,14 +1,24 @@
-const express=require('express')
+const path = require('path');
 
-const app=express();
-app.use((req,res,next)=>{//everything has to pass through these middleware
-	console.log("in the middleware")
-next();//Allows the req to continue to the next Middleware in line.
-});
-app.use((req,res,next)=>{
-	console.log("in the another middleware")
-	res.send('<h1>Vibhu is everywhere</h1>')
+const express = require('express');
+const bodyParser = require('body-parser');
 
-})
+const errorController = require('./controllers/error');
+
+const app = express();
+
+app.set('view engine', 'ejs');
+app.set('views', 'views');
+
+const adminRoutes = require('./routes/admin');
+const shopRoutes = require('./routes/shop');
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.use('/admin', adminRoutes);
+app.use(shopRoutes);
+
+app.use(errorController.get404);
 
 app.listen(3000);
